@@ -6,21 +6,21 @@
 //
 
 struct Bag {
-    var tiles: [Tile] = []
+    var tiles: [TileType] = []
     let numberOfTileOfTheSameColorAndShape = 3
     
     init() {
-        for shape in Tile.Shape.allCases {
-            for color in Tile.Color.allCases {
+        for shape in TileType.ShapeType.allCases {
+            for color in TileType.ColorType.allCases {
                 for _ in 1...numberOfTileOfTheSameColorAndShape {
-                    let newTile = Tile(requestedShape: shape, requestedColor: color)
+                    let newTile = TileType(requestedShape: shape, requestedColor: color)
                     tiles.append(newTile)
                 }
             }
         }
     }
     
-    mutating func pickRandom() -> Tile {
+    mutating func pickRandom() -> TileType {
         let randomInt = Int.random(in: 0...tiles.count - 1)
         return tiles.remove(at: randomInt)
     }

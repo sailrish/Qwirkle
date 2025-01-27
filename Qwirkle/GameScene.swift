@@ -10,6 +10,7 @@ import SpriteKit
 class GameScene: SKScene {
     
     let colors = [UIColor.red, UIColor.blue, UIColor.purple, UIColor.yellow, UIColor.orange, UIColor.green]
+    var displayBoard: DisplayBoardType = .init()
     
     override func didMove(to view: SKView) {
         
@@ -17,26 +18,26 @@ class GameScene: SKScene {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
-        var location = touch.location(in: self)
+        let clickLocation = touch.location(in: self)
         
         var gameBag = Bag()
         
+        let tileLocation = displayBoard.determinPositionToSnap(clickLocation: clickLocation)
         
-        for _ in 1...6 {
-            let pickedTile = gameBag.pickRandom()
-            let imageName = "\(pickedTile.color.rawValue)\(pickedTile.shape.rawValue)"
-            let tileShown = SKSpriteNode(imageNamed: imageName)
-            tileShown.size = CGSize(width: pickedTile.width, height: pickedTile.height)
-            location.x = location.x + CGFloat(70)
-            tileShown.position = location
-            tileShown.zPosition = 1
-            addChild(tileShown)
-                        
-            // main black tile
-            let tile = SKSpriteNode(imageNamed: "mainBlackTile")
-            tile.position = location
-            tile.size = CGSize(width: 65, height: 65)
-            addChild(tile)
-        }
+        
+        let pickedTile = gameBag.pickRandom()
+        let imageName = "\(pickedTile.color.rawValue)\(pickedTile.shape.rawValue)"
+        let tileShown = SKSpriteNode(imageNamed: imageName)
+        tileShown.size = CGSize(width: pickedTile.width, height: pickedTile.height)
+        tileShown.position = tileLocation
+        tileShown.zPosition = 1
+        addChild(tileShown)
+                    
+        let tile = SKShapeNode(rectOf: CGSize(width: 69, height: 69))
+        tile.position = tileLocation
+        tile.fillColor = .black
+        tile.strokeColor = .white
+        tile.lineWidth = 1
+        addChild(tile)
     }
 }
