@@ -9,11 +9,15 @@ import SpriteKit
 
 class GameScene: SKScene {
     
+    var cameraNode: SKCameraNode!
+    
     let colors = [UIColor.red, UIColor.blue, UIColor.purple, UIColor.yellow, UIColor.orange, UIColor.green]
     var displayBoard: DisplayBoardType = .init()
     
     override func didMove(to view: SKView) {
-        
+        cameraNode = SKCameraNode()
+        self.addChild(cameraNode)
+        self.camera = cameraNode
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -23,7 +27,7 @@ class GameScene: SKScene {
         var gameBag = Bag()
         
         let tileLocation = displayBoard.determinPositionToSnap(clickLocation: clickLocation)
-        
+        print("tile location: \(tileLocation)")
         
         let pickedTile = gameBag.pickRandom()
         let imageName = "\(pickedTile.color.rawValue)\(pickedTile.shape.rawValue)"
