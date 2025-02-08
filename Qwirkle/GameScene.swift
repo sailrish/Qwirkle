@@ -25,23 +25,27 @@ class GameScene: SKScene {
         let clickLocation = touch.location(in: self)
         
         var gameBag = Bag()
-        
+                
         let tileLocation = displayBoard.determinPositionToSnap(clickLocation: clickLocation)
-        print("tile location: \(tileLocation)")
+        let (row, column) = displayBoard.determineRowAndColumn(clickLocation: clickLocation)
         
         let pickedTile = gameBag.pickRandom()
-        let imageName = "\(pickedTile.color.rawValue)\(pickedTile.shape.rawValue)"
-        let tileShown = SKSpriteNode(imageNamed: imageName)
-        tileShown.size = CGSize(width: pickedTile.width, height: pickedTile.height)
-        tileShown.position = tileLocation
-        tileShown.zPosition = 1
-        addChild(tileShown)
-                    
-        let tile = SKShapeNode(rectOf: CGSize(width: 69, height: 69))
-        tile.position = tileLocation
-        tile.fillColor = .black
-        tile.strokeColor = .white
-        tile.lineWidth = 1
-        addChild(tile)
+        let wasTilePlaced = displayBoard.placeTile(tile: pickedTile, row: row, column: column)
+        if wasTilePlaced {
+            let imageName = "\(pickedTile.color.rawValue)\(pickedTile.shape.rawValue)"
+            let tileShown = SKSpriteNode(imageNamed: imageName)
+            tileShown.size = CGSize(width: pickedTile.width, height: pickedTile.height)
+            tileShown.position = tileLocation
+            tileShown.zPosition = 1
+            addChild(tileShown)
+            
+            let tile = SKShapeNode(rectOf: CGSize(width: 69, height: 69))
+            tile.position = tileLocation
+            tile.fillColor = .black
+            tile.strokeColor = .white
+            tile.lineWidth = 1
+            addChild(tile)
+        }
+        
     }
 }

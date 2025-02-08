@@ -31,12 +31,17 @@ struct DisplayBoardType {
     }
     
     func determinPositionToSnap(clickLocation: CGPoint) -> CGPoint {
-        let column = Int((clickLocation.x - MINX) / TILESIZE)
-        let row = Int((clickLocation.y - MINY) / TILESIZE)
+        let (row, column) = determineRowAndColumn(clickLocation: clickLocation)
         let snapx = MINX + (TILESIZE / 2) + (TILESIZE * Double(column))
         let snapy = MINY + (TILESIZE / 2) + (TILESIZE * Double(row))
         let snapLocation = CGPoint(x: snapx, y: snapy)
         
         return snapLocation
+    }
+    
+    func determineRowAndColumn(clickLocation: CGPoint) -> (Int, Int) {
+        let column = Int((clickLocation.x - MINX) / TILESIZE)
+        let row = Int((clickLocation.y - MINY) / TILESIZE)
+        return (row, column)
     }
 }
