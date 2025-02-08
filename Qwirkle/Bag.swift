@@ -5,7 +5,7 @@
 //  Created by Sanya Arora on 1/21/25.
 //
 
-struct Bag {
+class Bag {
     var tiles: [TileType] = []
     let numberOfTileOfTheSameColorAndShape = 3
     
@@ -20,7 +20,7 @@ struct Bag {
         }
     }
     
-    mutating func pickRandom() -> TileType {
+    func pickRandom() -> TileType {
         let randomInt = Int.random(in: 0...tiles.count - 1)
         return tiles.remove(at: randomInt)
     }

@@ -5,7 +5,8 @@
 //  Created by Sanya Arora on 1/21/25.
 //
 
-struct TileType {
+struct TileType: CustomStringConvertible {
+    
     enum ShapeType: String, CaseIterable {
         case square = "Square",
              circle = "Circle",
@@ -41,5 +42,9 @@ struct TileType {
         shape = requestedShape
         color = requestedColor
         (width, height) = (shapeSizes[requestedShape])!
+    }
+    
+    var description: String {
+        return "\(shape), \(color)"
     }
 }

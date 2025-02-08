@@ -14,18 +14,23 @@ class GameScene: SKScene {
     let colors = [UIColor.red, UIColor.blue, UIColor.purple, UIColor.yellow, UIColor.orange, UIColor.green]
     var displayBoard: DisplayBoardType = .init()
     
+    var gameBag: Bag = .init()
+    var computerRack: TileRackType = .init()
+    var playerRack: TileRackType = .init()
+    
     override func didMove(to view: SKView) {
         cameraNode = SKCameraNode()
         self.addChild(cameraNode)
         self.camera = cameraNode
+        
+        self.computerRack = TileRackType(bag: self.gameBag)
+        self.playerRack = TileRackType(bag: self.gameBag)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let clickLocation = touch.location(in: self)
         
-        var gameBag = Bag()
-                
         let tileLocation = displayBoard.determinPositionToSnap(clickLocation: clickLocation)
         let (row, column) = displayBoard.determineRowAndColumn(clickLocation: clickLocation)
         
