@@ -18,6 +18,8 @@ class GameScene: SKScene {
     var computerRack: TileRackType = .init()
     var playerRack: TileRackType = .init()
     
+    let playerRackBox = SKShapeNode(rectOf: CGSize(width: 750, height: 135))
+    
     override func didMove(to view: SKView) {
         cameraNode = SKCameraNode()
         self.addChild(cameraNode)
@@ -25,6 +27,37 @@ class GameScene: SKScene {
         
         self.computerRack = TileRackType(bag: self.gameBag)
         self.playerRack = TileRackType(bag: self.gameBag)
+        
+        playerRackBox.position = CGPoint(x: 0, y: -480)
+        playerRackBox.fillColor = .lightGray
+        addChild(playerRackBox)
+        
+        displayPlayerRack()
+    }
+    
+    func displayTile(tile: TileType, center: CGPoint, parent: SKNode) {
+        let blackTile = SKShapeNode(rectOf: CGSize(width: 69, height: 69))
+        blackTile.position = center
+        blackTile.fillColor = .black
+        blackTile.strokeColor = .white
+        blackTile.lineWidth = 1
+        parent.addChild(blackTile)
+
+        let imageName = "\(tile.color.rawValue)\(tile.shape.rawValue)"
+        let tileShown = SKSpriteNode(imageNamed: imageName)
+        tileShown.size = CGSize(width: tile.width, height: tile.height)
+        blackTile.addChild(tileShown)
+    }
+    
+    func displayPlayerRack() {
+        for i in 0...playerRack.MAX_NUMBER_OF_TILES - 1 {
+            let tile = playerRack.tiles[i]
+            
+            if tile != nil {
+                let x = displayBoard.MINX + 100 + displayBoard.TILESIZE * Double(i)
+                displayTile(tile: tile!, center: CGPoint(x: CGFloat(x), y: 20), parent: playerRackBox)
+            }
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -37,20 +70,9 @@ class GameScene: SKScene {
         let pickedTile = gameBag.pickRandom()
         let wasTilePlaced = displayBoard.placeTile(tile: pickedTile, row: row, column: column)
         if wasTilePlaced {
-            let imageName = "\(pickedTile.color.rawValue)\(pickedTile.shape.rawValue)"
-            let tileShown = SKSpriteNode(imageNamed: imageName)
-            tileShown.size = CGSize(width: pickedTile.width, height: pickedTile.height)
-            tileShown.position = tileLocation
-            tileShown.zPosition = 1
-            addChild(tileShown)
-            
-            let tile = SKShapeNode(rectOf: CGSize(width: 69, height: 69))
-            tile.position = tileLocation
-            tile.fillColor = .black
-            tile.strokeColor = .white
-            tile.lineWidth = 1
-            addChild(tile)
+            displayTile(tile: pickedTile, center: tileLocation, parent: self)
         }
+        
         
     }
 }
