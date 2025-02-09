@@ -36,28 +36,20 @@ class GameScene: SKScene {
     }
     
     func displayTile(tile: TileType, center: CGPoint, parent: SKNode) {
-        let blackTile = SKShapeNode(rectOf: CGSize(width: 69, height: 69))
-        blackTile.position = center
-        blackTile.fillColor = .black
-        blackTile.strokeColor = .white
-        blackTile.lineWidth = 1
-        parent.addChild(blackTile)
-
-        let imageName = "\(tile.color.rawValue)\(tile.shape.rawValue)"
-        let tileShown = SKSpriteNode(imageNamed: imageName)
-        tileShown.size = CGSize(width: tile.width, height: tile.height)
-        blackTile.addChild(tileShown)
+        let newTile = DisplayTileType(tile: tile, center: center)
+        parent.addChild(newTile)
     }
     
     func displayPlayerRack() {
+        let tileGroup: TileGroupType = .init()
         for i in 0...playerRack.MAX_NUMBER_OF_TILES - 1 {
             let tile = playerRack.tiles[i]
-            
             if tile != nil {
-                let x = displayBoard.MINX + 100 + displayBoard.TILESIZE * Double(i)
-                displayTile(tile: tile!, center: CGPoint(x: CGFloat(x), y: 20), parent: playerRackBox)
+                tileGroup.addTile(tile: tile!)
             }
         }
+        tileGroup.position = CGPoint(x: -175, y: 30)
+        playerRackBox.addChild(tileGroup)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -70,7 +62,8 @@ class GameScene: SKScene {
         let pickedTile = gameBag.pickRandom()
         let wasTilePlaced = displayBoard.placeTile(tile: pickedTile, row: row, column: column)
         if wasTilePlaced {
-            displayTile(tile: pickedTile, center: tileLocation, parent: self)
+            let newTile = DisplayTileType(tile: pickedTile, center: tileLocation)
+            addChild(newTile)
         }
         
         
