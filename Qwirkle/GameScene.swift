@@ -70,6 +70,7 @@ class GameScene: SKScene {
                     displayTile(tile: pickedTile!, center: tileLocation, parent: self)
                     playerRackBox.removeChildren(in: [selectedPlayerTile!])
                     selectedPlayerTile = nil
+                    
                 }
             }
         }
