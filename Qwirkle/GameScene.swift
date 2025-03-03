@@ -36,17 +36,8 @@ class GameScene: SKScene {
     }
     
     func displayTile(tile: TileType, center: CGPoint, parent: SKNode) {
-        let blackTile = SKShapeNode(rectOf: CGSize(width: 69, height: 69))
-        blackTile.position = center
-        blackTile.fillColor = .black
-        blackTile.strokeColor = .white
-        blackTile.lineWidth = 1
-        parent.addChild(blackTile)
-
-        let imageName = "\(tile.color.rawValue)\(tile.shape.rawValue)"
-        let tileShown = SKSpriteNode(imageNamed: imageName)
-        tileShown.size = CGSize(width: tile.width, height: tile.height)
-        blackTile.addChild(tileShown)
+        let newTile = DisplayTileType(inputTile: tile, location: center)
+        parent.addChild(newTile)
     }
     
     func displayPlayerRack() {
@@ -64,15 +55,22 @@ class GameScene: SKScene {
         guard let touch = touches.first else { return }
         let clickLocation = touch.location(in: self)
         
-        let tileLocation = displayBoard.determinPositionToSnap(clickLocation: clickLocation)
-        let (row, column) = displayBoard.determineRowAndColumn(clickLocation: clickLocation)
+        // let tileLocation = displayBoard.determinPositionToSnap(clickLocation: clickLocation)
+        // let (row, column) = displayBoard.determineRowAndColumn(clickLocation: clickLocation)
         
-        let pickedTile = gameBag.pickRandom()
-        let wasTilePlaced = displayBoard.placeTile(tile: pickedTile, row: row, column: column)
-        if wasTilePlaced {
-            displayTile(tile: pickedTile, center: tileLocation, parent: self)
+        let nodes = self.nodes(at: clickLocation)
+        for node in nodes {
+            let displayTile = node as? DisplayTileType
+            if displayTile != nil {
+                print(displayTile!.tile!)
+            }
         }
         
+//        let pickedTile = gameBag.pickRandom()
+//        let wasTilePlaced = displayBoard.placeTile(tile: pickedTile, row: row, column: column)
+//        if wasTilePlaced {
+//            displayTile(tile: pickedTile, center: tileLocation, parent: self)
+//        }
         
     }
 }

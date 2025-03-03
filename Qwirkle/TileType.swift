@@ -5,7 +5,7 @@
 //  Created by Sanya Arora on 1/21/25.
 //
 
-struct TileType: CustomStringConvertible {
+class TileType: CustomStringConvertible {
     
     enum ShapeType: String, CaseIterable {
         case square = "Square",
