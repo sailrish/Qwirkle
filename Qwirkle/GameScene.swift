@@ -17,6 +17,7 @@ class GameScene: SKScene {
     var gameBag: Bag = .init()
     var computerRack: TileRackType = .init()
     var playerRack: TileRackType = .init()
+    var selectedPlayerTile: DisplayTileType? = nil
     
     let playerRackBox = SKShapeNode(rectOf: CGSize(width: 750, height: 135))
     
@@ -55,22 +56,32 @@ class GameScene: SKScene {
         guard let touch = touches.first else { return }
         let clickLocation = touch.location(in: self)
         
-        // let tileLocation = displayBoard.determinPositionToSnap(clickLocation: clickLocation)
-        // let (row, column) = displayBoard.determineRowAndColumn(clickLocation: clickLocation)
+        
         
         let nodes = self.nodes(at: clickLocation)
-        for node in nodes {
-            let displayTile = node as? DisplayTileType
-            if displayTile != nil {
-                print(displayTile!.tile!)
+        if nodes.count == 0 {
+            // do this when player clicks on game board
+            let tileLocation = displayBoard.determinPositionToSnap(clickLocation: clickLocation)
+            let (row, column) = displayBoard.determineRowAndColumn(clickLocation: clickLocation)
+            if selectedPlayerTile != nil {
+                let pickedTile = selectedPlayerTile!.tile
+                let wasTilePlaced = displayBoard.placeTile(tile: pickedTile!, row: row, column: column)
+                if wasTilePlaced {
+                    displayTile(tile: pickedTile!, center: tileLocation, parent: self)
+                    playerRackBox.removeChildren(in: [selectedPlayerTile!])
+                    selectedPlayerTile = nil
+                }
             }
         }
-        
-//        let pickedTile = gameBag.pickRandom()
-//        let wasTilePlaced = displayBoard.placeTile(tile: pickedTile, row: row, column: column)
-//        if wasTilePlaced {
-//            displayTile(tile: pickedTile, center: tileLocation, parent: self)
-//        }
-        
+            
+        else {
+            // do this when player clicks on tile rack
+            for node in nodes {
+                let displayTile = node as? DisplayTileType
+                if displayTile != nil {
+                    selectedPlayerTile = displayTile
+                }
+            }
+        }
     }
 }
