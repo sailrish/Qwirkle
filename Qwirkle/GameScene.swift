@@ -70,7 +70,6 @@ class GameScene: SKScene {
                     displayTile(tile: pickedTile!, center: tileLocation, parent: self)
                     playerRackBox.removeChildren(in: [selectedPlayerTile!])
                     selectedPlayerTile = nil
-                    
                 }
             }
         }
@@ -79,8 +78,10 @@ class GameScene: SKScene {
             // do this when player clicks on tile rack
             for node in nodes {
                 let displayTile = node as? DisplayTileType
-                if displayTile != nil {
+                if displayTile != nil && displayTile!.parent == playerRackBox {
+                    selectedPlayerTile?.removeGlow()
                     selectedPlayerTile = displayTile
+                    selectedPlayerTile!.addGlow(radius: 30)
                 }
             }
         }
